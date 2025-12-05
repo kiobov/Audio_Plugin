@@ -60,7 +60,7 @@ public:
         Phase,
         Chorus,
         LadderFilter,
-        Overdrive,
+        OverDrive,
         END_OF_LIST
     };
 
