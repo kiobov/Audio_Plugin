@@ -129,6 +129,7 @@ const juce::String Project13AudioProcessor::getProgramName (int index)
 
 void Project13AudioProcessor::changeProgramName (int index, const juce::String& newName)
 {
+
 }
 
 //==============================================================================

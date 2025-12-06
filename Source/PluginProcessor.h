@@ -11,6 +11,7 @@
 #include <JuceHeader.h>
 #include <Fifo.h>
 
+
 //==============================================================================
 /**
 */
@@ -89,6 +90,7 @@ public:
     juce::AudioParameterFloat* chorusCenterDelayMs = nullptr;
     juce::AudioParameterFloat* chorusFeedbackPercent = nullptr;
     juce::AudioParameterFloat* chorusMixPercent = nullptr;
+
 private:
 
     DSP_Order dspOrder;
