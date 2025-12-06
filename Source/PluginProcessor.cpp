@@ -44,7 +44,14 @@ Project13AudioProcessor::Project13AudioProcessor()
         &phaserCenterFreqHz,
         &phaserDepthPercent,
         &phaserFeedbackPercent,
-        &phaserMixPercent
+        &phaserMixPercent,
+
+        & chorusRateHz ,
+        & chorusDepthPercent ,
+        & chorusCenterDelayMs ,
+        & chorusFeedbackPercent ,
+        & chorusMixPercent ,
+
     };
     auto floatNameFuncs = std::array
     {
@@ -52,7 +59,13 @@ Project13AudioProcessor::Project13AudioProcessor()
         &getPhaserCenterFreqName,
         &getPhaserDepthName,
         &getPhaserFeedbackName,
-        &getPhaserMixName
+        &getPhaserMixName,
+
+        & getChorusRateName,
+        & getChorusDepthName,
+        & getChorusCenterDelayName,
+        & getChorusFeedbackName,
+        & getChorusMixName,
 
     };
 
@@ -217,8 +230,37 @@ Project13AudioProcessor::createParameterLayout()
     Center delay: frq hz
     Feedback: -1 to +1
     Mix:  0-1*/
+    name = getChorusRateName();
+    layout.add(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{name,
+    versionHint}, 
+        name, 
+        juce::NormalisableRange<float>(0.01f, 100.f, 0.01f,1.f), 0.2f,"Hz")
+        );
+    name = getChorusDepthName();
+    layout.add(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{ name,
+    versionHint },
+        name,
+        juce::NormalisableRange<float>(0.01f, 100.f, 0.01f, 1.f), 0.05f, "Hz")
+    );
+    name = getChorusCenterDelayName();
+    layout.add(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{ name,
+    versionHint },
+        name,
+        juce::NormalisableRange<float>(0.01f, 100.f, 0.01f, 1.f), 7.f, "%")
+    );
+    name = getChorusFeedbackName();
+    layout.add(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{ name,
+    versionHint },
+        name,
+        juce::NormalisableRange<float>(0.01f, 100.f, 0.01f, 1.f), 0.0f, "%")
+    );
 
-
+    name = getChorusMixName();
+    layout.add(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{ name,
+    versionHint },
+        name,
+        juce::NormalisableRange<float>(0.01f, 100.f, 0.01f, 1.f), 0.05f, "%")
+    );
 
     return layout;
 }
