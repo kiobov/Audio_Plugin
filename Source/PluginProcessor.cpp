@@ -471,6 +471,29 @@ void Project13AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
     //TODO:  delay module 
 
 
+    phaser.dsp.setRate(phaserRateHz->get());
+    phaser.dsp.setCentreFrequency(phaserCenterFreqHz->get());
+    phaser.dsp.setDepth(phaserDepthPercent->get());
+    phaser.dsp.setFeedback(phaserFeedbackPercent->get());
+    phaser.dsp.setMix(phaserMixPercent->get());
+
+    chorus.dsp.setRate(chorusRateHz->get());
+    chorus.dsp.setDepth(chorusDepthPercent->get());
+    chorus.dsp.setCentreDelay(chorusCenterDelayMs->get());
+    chorus.dsp.setFeedback(chorusFeedbackPercent->get());
+    chorus.dsp.setMix(chorusMixPercent->get());
+
+    overdrive.dsp.setDrive(overdriveSaturation->get());
+
+    ladderFilter.dsp.setMode(
+        static_cast<juce::dsp::LadderFilterMode>(ladderFilterMode->getIndex()));
+    ladderFilter.dsp.setCutoffFrequencyHz(ladderFilterCutoffHz->get());
+    ladderFilter.dsp.setResonance(ladderFilterCutoffHz->get());
+    ladderFilter.dsp.setDrive(ladderFilterDrive->get());
+
+
+
+
     auto newDSPOrder = DSP_Order();
 
     while (dspOrderFifo.pull(newDSPOrder)) 
