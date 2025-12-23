@@ -15,19 +15,23 @@ auto getPhaserCenterFreqName() { return juce::String("Phaser Center FreqHZ"); }
 auto getPhaserDepthName() { return juce::String("Phaser Depth %"); }
 auto getPhaserFeedbackName() { return juce::String("Phaser Feedback %"); }
 auto getPhaserMixName() { return juce::String("Phaser Mix %"); }
+auto getPhaserBypassName() { return juce::String("Phaser Bypass %"); }
 
 auto getChorusRateName() { return juce::String("Chorus RateHz"); }
 auto getChorusDepthName() { return juce::String("Chorus Depth Ms"); }
 auto getChorusCenterDelayName() { return juce::String("Chorus Center Delay Ms"); }
 auto getChorusFeedbackName() { return juce::String("Chorus Feedback %"); }
 auto getChorusMixName() { return juce::String("Chorus Mix %"); }
+auto getChorusBypassName() { return juce::String("Chorus Bypass "); }
 
 auto getOverdriveSaturationName() { return juce::String("OverDrive Saturation"); }
+auto getOverdriveBypassName() { return juce::String("Overdrive Bypass "); }
 
 auto getLadderFilterModeName() { return juce::String("Ladder Filter Mode"); }
 auto getLadderFilterCutoffName() { return juce::String("Ladder Filter Cutoff Hz"); }
 auto getLadderFilterResonanceName() { return juce::String("Ladder Filter Resonance"); }
 auto getLadderFilterDriveName() { return juce::String("Ladder Filter Drive"); }
+auto getLadderFilterBypassName() { return juce::String("Ladder Filter Bypass "); }
 
 
 auto getLadderFilterChoices()
@@ -58,6 +62,7 @@ auto getGeneralFilterModeName() { return juce::String("General Filter Mode"); }
 auto getGeneralFilterFreqName() { return juce::String("General Filter Freq Hz"); }
 auto getGeneralFilterQualityName() { return juce::String("General Filter Quality"); }
 auto getGeneralFilterGainName() { return juce::String("General Filter Gain"); }
+auto getGeneralFilterBypassName() { return juce::String("General Filter Bypass "); }
 
 //==============================================================================
 Project13AudioProcessor::Project13AudioProcessor()
@@ -163,7 +168,29 @@ Project13AudioProcessor::Project13AudioProcessor()
         jassert(*ptrToParamPtr != nullptr);
     }
 
+    auto bypassParams = std::array{
+        &phaserBypass,
+        & chorusBypass,
+        & overdriveBypass,
+        & ladderFilterBypass,
+        & generalFilterBypass,
 
+    };
+    auto bypassNameFuncs = std::array{
+        &getPhaserBypassName,
+        & getChorusBypassName,
+        & getOverdriveBypassName,
+        & getLadderFilterBypassName,
+        & getGeneralFilterBypassName,
+
+    };
+
+    for (size_t i = 0; i < bypassParams.size(); ++i) {
+        auto ptrToParamPtr = bypassParams[i];
+        *ptrToParamPtr = dynamic_cast<juce::AudioParameterBool*>(apvts.getParameter(
+            bypassNameFuncs[i]()));
+        jassert(*ptrToParamPtr != nullptr);
+    }
 
 }
 
@@ -305,6 +332,9 @@ Project13AudioProcessor::createParameterLayout()
     Center: frq hz
     Feedback: -1 to +1
     Mix:  0-1*/
+
+
+
     auto name = getPhaserRateName();
     layout.add(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID{
         name, versionHint },name, 
@@ -331,6 +361,21 @@ Project13AudioProcessor::createParameterLayout()
         name, versionHint }, name,
         juce::NormalisableRange<float>(0.01f, 1.f, 0.01f, 1.f),
         0.05f, "%"));
+    name = getPhaserBypassName();
+    layout.add(std::make_unique<juce::AudioParameterBool>(juce::ParameterID{
+        name, versionHint }, name, false));
+    name = getChorusBypassName();
+    layout.add(std::make_unique<juce::AudioParameterBool>(juce::ParameterID{
+        name, versionHint }, name, false));
+    name = getOverdriveBypassName();
+    layout.add(std::make_unique<juce::AudioParameterBool>(juce::ParameterID{
+        name, versionHint }, name, false));
+    name = getLadderFilterBypassName();
+    layout.add(std::make_unique<juce::AudioParameterBool>(juce::ParameterID{
+        name, versionHint }, name, false));
+    name = getGeneralFilterBypassName();
+    layout.add(std::make_unique<juce::AudioParameterBool>(juce::ParameterID{
+        name, versionHint }, name, false));
 
     /*
     Chorus:

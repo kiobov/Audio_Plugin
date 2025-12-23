@@ -38,7 +38,7 @@ Project13AudioProcessorEditor::Project13AudioProcessorEditor (Project13AudioProc
 
         }; 
         
-    
+  
     addAndMakeVisible(dspOrderButton);
     setSize (400, 300);
 }
